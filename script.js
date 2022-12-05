@@ -90,7 +90,6 @@ function function1() {
 
   function setNextQuestion() {
     downloadTimer = setInterval(function1, 1000);
-    //start timer and display the time remaining to the user
     showQuestion(questions[currentQuestionIndex]);
   }
 
@@ -121,7 +120,7 @@ function function1() {
       clearInterval(downloadTimer);
       timeleft -= 5;
       downloadTimer = setInterval(function1, 1000);
-      // check if any time is remaining on timer and end quiz if not
+
       if (timeleft <= 0) {
         close();
       }
