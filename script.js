@@ -106,3 +106,33 @@ function function1() {
       answersArea.appendChild(answerButton);
     }
   }
+
+  function selectAnswer() {
+    if (this.value === questions[currentQuestionIndex].correctAnswer) {
+      userScore = userScore + 1;
+      alert("correct " + userScore);
+    } else {
+      if (userScore > 0) {
+        userScore = userScore - 1;
+      }
+  
+      alert("incorrect " + userScore);
+  
+      clearInterval(downloadTimer);
+      timeleft -= 5;
+      downloadTimer = setInterval(function1, 1000);
+      // check if any time is remaining on timer and end quiz if not
+      if (timeleft <= 0) {
+        close();
+      }
+    }
+    currentQuestionIndex++;
+  
+    var amountOfQuestions = questions.length;
+  
+    if (amountOfQuestions === currentQuestionIndex) {
+      close();
+    } else {
+      showQuestion(questions[currentQuestionIndex]);
+    }
+  }
