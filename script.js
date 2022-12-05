@@ -76,3 +76,33 @@ function close() {
         storedScore
     );
   }
+
+function function1() {
+    document.getElementById("countdown").innerHTML =
+      timeleft + "&nbsp" + "seconds remaining";
+  
+    timeleft -= 1;
+  
+    if (timeleft <= 0) {
+      close();
+    }
+  }
+
+  function setNextQuestion() {
+    downloadTimer = setInterval(function1, 1000);
+    //start timer and display the time remaining to the user
+    showQuestion(questions[currentQuestionIndex]);
+  }
+
+  function showQuestion(question) {
+    questionElement.textContent = question.question;
+    var answersArea = document.getElementById("answer-buttons");
+    answersArea.innerHTML = "";
+    for (var i = 0; i < question.answers.length; i++) {
+      var answerButton = document.createElement("button");
+      answerButton.setAttribute("value", question.answers[i]);
+      answerButton.textContent = question.answers[i];
+      answerButton.addEventListener("click", selectAnswer);
+      answersArea.appendChild(answerButton);
+    }
+  }
