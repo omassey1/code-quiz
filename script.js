@@ -37,4 +37,14 @@ var nextButton = document.getElementById("next-btn");
 var questionContainerElement = document.getElementById("question-container");
 questionContainerElement.style.display = "none";
 var questionElement = document.getElementById("questionAsked");
-var answerButtonsElement = document.getElementById("answer-buttons");
+var answerButtonsElement
+
+var currentQuestionIndex = 0;
+
+startButton.addEventListener("click", startGame);
+
+function startGame() {
+  starterScreen.style.display = "none";
+  questionContainerElement.style.display = "block";
+  setNextQuestion();
+}
