@@ -30,3 +30,11 @@ var questions = [
       correctAnswer: "Variable",
     },
   ];
+
+  var startButton = document.getElementById("start-btn");
+var starterScreen = document.getElementById("starterCode");
+var nextButton = document.getElementById("next-btn");
+var questionContainerElement = document.getElementById("question-container");
+questionContainerElement.style.display = "none";
+var questionElement = document.getElementById("questionAsked");
+var answerButtonsElement = document.getElementById("answer-buttons");
