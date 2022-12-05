@@ -48,3 +48,31 @@ function startGame() {
   questionContainerElement.style.display = "block";
   setNextQuestion();
 }
+
+function close() {
+    clearInterval(downloadTimer);
+    document.getElementById("countdown").innerHTML = "Time is up!";
+    var containerMain = document.getElementById("container");
+    containerMain.style.display = "none";
+  
+    initials = document.getElementById("userInput").value;
+  
+    document.getElementById("userInitials").innerHTML = initials;
+    document.getElementById("score").innerHTML = userScore;
+  
+    var containerMain = document.getElementById("resultsContainer");
+    containerMain.style.display = "block";
+  
+    localStorage.setItem("initials", initials);
+    localStorage.setItem("score", userScore);
+  
+    var storedInitials = localStorage.getItem("initials");
+    var storedScore = localStorage.getItem("score");
+  
+    alert(
+      "Stored initials are " +
+        storedInitials +
+        " and the stored score is " +
+        storedScore
+    );
+  }
