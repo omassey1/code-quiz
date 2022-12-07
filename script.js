@@ -1,144 +1,118 @@
-var downloadTimer;
-var timeleft = 60;
-var userScore = 0;
-var initials;
+// Define variables
+const startButton = document.getElementById("start-button");
+const questionsDiv = document.getElementById("questions");
+const endDiv = document.getElementById("end");
+const questionEl = document.getElementById("question");
+const answerButtons = document.querySelectorAll("input[name='answer']");
+const scoreEl = document.getElementById("score");
+const initialsEl = document.getElementById("initials");
+const highscoresButton = document.getElementById("highscores");
+const timeEl = document.getElementById("time");
+let questionIndex = 0;
+let score = 0;
+let timeLeft = 75;
 
-
-var questions = [
+// Define Questions
+const questions = [
     {
-      question: "Inside which HTML element do we put the JavaScript?",
-      answers: ["<javascript>", "<js>", "<script>", "<scripting>"],
-      correctAnswer: "<script>",
+        question: "What does HTML stand for?",
+        answers: {
+            A: "Hypertext Markup Language",
+            B: "High Text Markup Language",
+            C: "Hyper Tabular Markup Language",
+            D: "Hyper Technology Markup Language"
+        },
+        correctAnswer: "A"
     },
     {
-      question: "How does a for loop start?",
-      answers: ["for (i = 0; i <= 5)", "for (i = 0; i <= 5; i++)", "for i = 1 to 5", "for (i <= 5; i++)"],
-      correctAnswer: "for (i = 0; i <= 5; i++)",
+        question: "What does CSS stand for?",
+        answers: {
+            A: "Cascading Style Sheets",
+            B: "Computer Style Sheets",
+            C: "Colorful Style Sheets",
+            D: "Creative Style Sheets"
+        },
+        correctAnswer: "A"
     },
     {
-      question: "How can you add a comment in a JavaScript?",
-      answers: ["//This is a comment ", "'This is a comment", "<!--This is a comment-->", "#This is a comment"],
-      correctAnswer: "//This is a comment",
-    },
-    {
-      question: "In JavaScript, which of the following is a logical operator?",
-      answers: ["|", "%", "/", "&&"],
-      correctAnswer: "&&",
-    },
-    {
-      question: "A named element in a JavaScript program that is used to store and retrieve data is a _____.",
-      answers: ["Method", "assignment operator", "Variable", "string"],
-      correctAnswer: "Variable",
-    },
-  ];
-
-
-var startButton = document.getElementById("start-btn");
-var starterScreen = document.getElementById("starterCode");
-var nextButton = document.getElementById("next-btn");
-var questionContainerElement = document.getElementById("question-container");
-questionContainerElement.style.display = "none";
-var questionElement = document.getElementById("questionAsked");
-var answerButtonsElement = document.getElementById("answer-buttons");
-
-
-var currentQuestionIndex = 0;
-
-startButton.addEventListener("click", startGame);
-
-function startGame() {
-  starterScreen.style.display = "none";
-  questionContainerElement.style.display = "block";
-  setNextQuestion();
-}
-
-
-function close() {
-  clearInterval(downloadTimer);
-  document.getElementById("countdown").innerHTML = "Time is up!";
-  var containerMain = document.getElementById("container");
-  containerMain.style.display = "none";
-
-  initials = document.getElementById("userInput").value;
-
-  document.getElementById("userInitials").innerHTML = initials;
-  document.getElementById("score").innerHTML = userScore;
-
-  var containerMain = document.getElementById("resultsContainer");
-  containerMain.style.display = "block";
-
-  localStorage.setItem("initials", initials);
-  localStorage.setItem("score", userScore);
-
-  var storedInitials = localStorage.getItem("initials");
-  var storedScore = localStorage.getItem("score");
-
-  alert(
-    "Stored initials are " +
-      storedInitials +
-      " and the stored score is " +
-      storedScore
-  );
-}
-
-
-function function1() {
-  document.getElementById("countdown").innerHTML =
-    timeleft + "&nbsp" + "seconds remaining";
-
-  timeleft -= 1;
-
-  if (timeleft <= 0) {
-    close();
-  }
-}
-
-function setNextQuestion() {
-  downloadTimer = setInterval(function1, 1000);
-  
-  showQuestion(questions[currentQuestionIndex]);
-}
-
-function showQuestion(question) {
-  questionElement.textContent = question.question;
-  var answersArea = document.getElementById("answer-buttons");
-  answersArea.innerHTML = "";
-  for (var i = 0; i < question.answers.length; i++) {
-    var answerButton = document.createElement("button");
-    answerButton.setAttribute("value", question.answers[i]);
-    answerButton.textContent = question.answers[i];
-    answerButton.addEventListener("click", selectAnswer);
-    answersArea.appendChild(answerButton);
-  }
-}
-
-
-function selectAnswer() {
-  if (this.value === questions[currentQuestionIndex].correctAnswer) {
-    userScore = userScore + 1;
-    alert("correct " + userScore);
-  } else {
-    if (userScore > 0) {
-      userScore = userScore - 1;
+        question: "What does JavaScript stand for?",
+        answers: {
+            A: "Just Simple Actionscript",
+            B: "Java Syntax Application",
+            C: "JavaScript Syntax Application",
+            D: "Just Syntax Actionscript"
+        },
+        correctAnswer: "C"
     }
+];
 
-    alert("incorrect " + userScore);
+// Start the quiz when the start button is clicked
+startButton.addEventListener("click", startQuiz);
 
-    clearInterval(downloadTimer);
-    timeleft -= 5;
-    downloadTimer = setInterval(function1, 1000);
-    
-    if (timeleft <= 0) {
-      close();
-    }
-  }
-  currentQuestionIndex++;
-
-  var amountOfQuestions = questions.length;
-
-  if (amountOfQuestions === currentQuestionIndex) {
-    close();
-  } else {
-    showQuestion(questions[currentQuestionIndex]);
-  }
+// Set the timer and start the quiz
+function startQuiz() {
+    startButton.classList.add("hide");
+    questionsDiv.classList.remove("hide");
+    setTimer();
+    renderQuestion();
 }
+
+// Set the timer
+function setTimer() {
+    let timerInterval = setInterval(function() {
+        timeLeft--;
+        timeEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            endQuiz();
+        }
+    }, 1000);
+}
+
+// Render the questions
+function renderQuestion() {
+    questionEl.textContent = questions[questionIndex].question;
+    const answers = Object.values(questions[questionIndex].answers);
+    for (let i = 0; i < answerButtons.length; i++) {
+        answerButtons[i].value = answers[i];
+        answerButtons[i].nextElementSibling.textContent = answers[i];
+    }
+}
+
+// Check the answer
+questionsDiv.addEventListener("submit", function(e) {
+    e.preventDefault();
+    const answer = document.querySelector("input[name='answer']:checked");
+    if (answer.value === questions[questionIndex].correctAnswer) {
+        score++;
+    } else {
+        timeLeft -= 10;
+    }
+    questionIndex++;
+    if (questionIndex === questions.length) {
+        endQuiz();
+    } else {
+        renderQuestion();
+    }
+});
+
+// End the quiz
+function endQuiz() {
+    questionsDiv.classList.add("hide");
+    endDiv.classList.remove("hide");
+    scoreEl.textContent = score;
+}
+
+// Save the score
+endDiv.addEventListener("submit", function(e) {
+    e.preventDefault();
+    const initials = initialsEl.value;
+    localStorage.setItem("initials", initials);
+    localStorage.setItem("score", score);
+    window.location.href = "highscores.html";
+});
+
+// View the highscores
+highscoresButton.addEventListener("click", function() {
+    window.location.href = "highscores.html";
+});
