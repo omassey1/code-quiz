@@ -1,7 +1,8 @@
-var timerDownalod;
+var downloadTimer;
 var timeleft = 60;
-var playerrScore = 0;
-var playerInitials;
+var userScore = 0;
+var initials;
+
 
 var questions = [
     {
@@ -31,13 +32,15 @@ var questions = [
     },
   ];
 
-  var startButton = document.getElementById("start-btn");
+
+var startButton = document.getElementById("start-btn");
 var starterScreen = document.getElementById("starterCode");
 var nextButton = document.getElementById("next-btn");
 var questionContainerElement = document.getElementById("question-container");
 questionContainerElement.style.display = "none";
 var questionElement = document.getElementById("questionAsked");
-var answerButtonsElement
+var answerButtonsElement = document.getElementById("answer-buttons");
+
 
 var currentQuestionIndex = 0;
 
@@ -49,89 +52,93 @@ function startGame() {
   setNextQuestion();
 }
 
+
 function close() {
-    clearInterval(downloadTimer);
-    document.getElementById("countdown").innerHTML = "Time is up!";
-    var containerMain = document.getElementById("container");
-    containerMain.style.display = "none";
-  
-    initials = document.getElementById("userInput").value;
-  
-    document.getElementById("userInitials").innerHTML = initials;
-    document.getElementById("score").innerHTML = userScore;
-  
-    var containerMain = document.getElementById("resultsContainer");
-    containerMain.style.display = "block";
-  
-    localStorage.setItem("initials", initials);
-    localStorage.setItem("score", userScore);
-  
-    var storedInitials = localStorage.getItem("initials");
-    var storedScore = localStorage.getItem("score");
-  
-    alert(
-      "Stored initials are " +
-        storedInitials +
-        " and the stored score is " +
-        storedScore
-    );
-  }
+  clearInterval(downloadTimer);
+  document.getElementById("countdown").innerHTML = "Time is up!";
+  var containerMain = document.getElementById("container");
+  containerMain.style.display = "none";
+
+  initials = document.getElementById("userInput").value;
+
+  document.getElementById("userInitials").innerHTML = initials;
+  document.getElementById("score").innerHTML = userScore;
+
+  var containerMain = document.getElementById("resultsContainer");
+  containerMain.style.display = "block";
+
+  localStorage.setItem("initials", initials);
+  localStorage.setItem("score", userScore);
+
+  var storedInitials = localStorage.getItem("initials");
+  var storedScore = localStorage.getItem("score");
+
+  alert(
+    "Stored initials are " +
+      storedInitials +
+      " and the stored score is " +
+      storedScore
+  );
+}
+
 
 function function1() {
-    document.getElementById("countdown").innerHTML =
-      timeleft + "&nbsp" + "seconds remaining";
+  document.getElementById("countdown").innerHTML =
+    timeleft + "&nbsp" + "seconds remaining";
+
+  timeleft -= 1;
+
+  if (timeleft <= 0) {
+    close();
+  }
+}
+
+function setNextQuestion() {
+  downloadTimer = setInterval(function1, 1000);
   
-    timeleft -= 1;
-  
+  showQuestion(questions[currentQuestionIndex]);
+}
+
+function showQuestion(question) {
+  questionElement.textContent = question.question;
+  var answersArea = document.getElementById("answer-buttons");
+  answersArea.innerHTML = "";
+  for (var i = 0; i < question.answers.length; i++) {
+    var answerButton = document.createElement("button");
+    answerButton.setAttribute("value", question.answers[i]);
+    answerButton.textContent = question.answers[i];
+    answerButton.addEventListener("click", selectAnswer);
+    answersArea.appendChild(answerButton);
+  }
+}
+
+
+function selectAnswer() {
+  if (this.value === questions[currentQuestionIndex].correctAnswer) {
+    userScore = userScore + 1;
+    alert("correct " + userScore);
+  } else {
+    if (userScore > 0) {
+      userScore = userScore - 1;
+    }
+
+    alert("incorrect " + userScore);
+
+    clearInterval(downloadTimer);
+    timeleft -= 5;
+    downloadTimer = setInterval(function1, 1000);
+    
     if (timeleft <= 0) {
       close();
     }
   }
+  currentQuestionIndex++;
 
-  function setNextQuestion() {
-    downloadTimer = setInterval(function1, 1000);
+  var amountOfQuestions = questions.length;
+
+  if (amountOfQuestions === currentQuestionIndex) {
+    close();
+  } else {
     showQuestion(questions[currentQuestionIndex]);
   }
-
-  function showQuestion(question) {
-    questionElement.textContent = question.question;
-    var answersArea = document.getElementById("answer-buttons");
-    answersArea.innerHTML = "";
-    for (var i = 0; i < question.answers.length; i++) {
-      var answerButton = document.createElement("button");
-      answerButton.setAttribute("value", question.answers[i]);
-      answerButton.textContent = question.answers[i];
-      answerButton.addEventListener("click", selectAnswer);
-      answersArea.appendChild(answerButton);
-    }
-  }
-
-  function selectAnswer() {
-    if (this.value === questions[currentQuestionIndex].correctAnswer) {
-      userScore = userScore + 1;
-      alert("correct " + userScore);
-    } else {
-      if (userScore > 0) {
-        userScore = userScore - 1;
-      }
-  
-      alert("incorrect " + userScore);
-  
-      clearInterval(downloadTimer);
-      timeleft -= 5;
-      downloadTimer = setInterval(function1, 1000);
-
-      if (timeleft <= 0) {
-        close();
-      }
-    }
-    currentQuestionIndex++;
-  
-    var amountOfQuestions = questions.length;
-  
-    if (amountOfQuestions === currentQuestionIndex) {
-      close();
-    } else {
-      showQuestion(questions[currentQuestionIndex]);
-    }
-  }
+}

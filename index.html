@@ -7,29 +7,45 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main id="container" class="container">
-      <section id="starterCode">
-        <h2>Click Start to  the quiz</h2>
-        <button
-          id="start-btn"
-          class="start-btn btn"
-          onclick="setNextQuestion()"
-        >Start</button>
-      </section>
-      <time id="countdown"></time>
-      <p>What are your initials? <input id="userInput" /></p>
-      <details id="question-container">
-        <div id="countdown"></div>
-        <div id="question">Question</div>
-        <h3 id="questionAsked"></h3>
-        <div id="answer-buttons" class="btn-grid"></div>
-      </details>
+    <header>
+        <h1>Coding Quiz</h1>
+        <button id="highscores">Highscores</button>
+        <div id="timer">
+            <span>Time:</span>
+            <span id="time"></span>
+        </div>
+    </header>
+    <main>
+        <div id="start">
+            <h2>Welcome to the Coding Quiz!</h2>
+            <button id="start-button">Start Quiz</button>
+        </div>
+        <div id="questions" class="hide">
+            <h2>Question:</h2>
+            <p id="question"></p>
+            <form>
+                <input type="radio" name="answer" value="A" id="A">
+                <label for="A">A</label><br>
+                <input type="radio" name="answer" value="B" id="B">
+                <label for="B">B</label><br>
+                <input type="radio" name="answer" value="C" id="C">
+                <label for="C">C</label><br>
+                <input type="radio" name="answer" value="D" id="D">
+                <label for="D">D</label><br>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <div id="end" class="hide">
+            <h2>Game Over!</h2>
+            <p>Your Score: <span id="score"></span></p>
+            <form>
+                <label for="initials">Initials: </label>
+                <input type="text" name="initials" id="initials">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
     </main>
-    <div id="resultsContainer" class="resultsContainer">
-      <h2>Leaderboard</h2>
-      <p><span id="userInitials"></span> Score: <span id="score"></span></p>
-      <div id="user-score"></div>
-    </div>
     <script src="script.js"></script>
+</body>
   </body>
 </html>
